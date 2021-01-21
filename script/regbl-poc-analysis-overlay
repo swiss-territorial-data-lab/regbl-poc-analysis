@@ -1,0 +1,80 @@
+#!/bin/bash
+#  regbl-poc-analysis
+#
+#      Nils Hamel - nils.hamel@alumni.epfl.ch
+#      Huriel Reichel
+#      Copyright (c) 2020-2021 Republic and Canton of Geneva
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# regbl-poc-analyse-overlay
+#
+# This script allows to apply the regbl-poc processing of building detection
+# overlay on the processed maps, used by the process, and the original map from
+# which the processing map are deduced.
+#
+# The maps are expected to be in tif format, not necessarly in geotiff, and
+# named identically in the three provided directory path, with identical size
+# and geographical footprint.
+#
+# ${1} : Storage path
+# ${2} : Location name
+
+# create exportation directory #
+mkdir -p ${1}/regbl_analysis/analysis_${2}/${2}_overlay
+
+# parsing original maps #
+for regbl_map in ${1}/regbl_frame/frame_${2}-original/*.tif; do
+
+    # extract map filename #
+    regbl_name=$(basename ${regbl_map} .tif)
+
+    # display information #
+    echo "Processing map ${regbl_name} ..."
+
+    # check consistency #
+    if [ ! -f ${1}/regbl_output/output_frame/frame_${2}/${regbl_name}.tif ]; then
+
+        # display message #
+        echo "error : unable to locate corresponding overlay file"
+
+        # send message #
+        exit 1
+
+    fi
+
+    # compose overlay with original map #
+    convert ${regbl_map} ${1}/regbl_output/output_frame/frame_${2}/${regbl_name}.tif -background black -gravity center -flatten -quality 90 ${1}/regbl_analysis/analysis_${2}/${2}_overlay/${regbl_name}-original.jpg &> /dev/null
+
+    # check consistency #
+    if [ ! -f ${1}/regbl_frame/frame_${2}/${regbl_name}.tif ]; then
+
+        # display message #
+        echo "error : unable to locate corresponding original map file"
+
+        # send message #
+        exit 1
+
+    fi
+
+    # compose overlay with processed map #
+    convert ${1}/regbl_frame/frame_${2}/${regbl_name}.tif ${1}/regbl_output/output_frame/frame_${2}/${regbl_name}.tif -background black -gravity center -flatten -quality 90 ${1}/regbl_analysis/analysis_${2}/${2}_overlay/${regbl_name}.jpg  &> /dev/null
+
+done
+
+# display information #
+echo "Done"
+
+# send message #
+exit 0
