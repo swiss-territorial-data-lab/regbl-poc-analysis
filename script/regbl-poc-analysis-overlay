@@ -21,21 +21,17 @@
 # regbl-poc-analyse-overlay
 #
 # This script allows to apply the regbl-poc processing of building detection
-# overlay on the processed maps, used by the process, and the original map from
-# which the processing map are deduced.
-#
-# The maps are expected to be in tif format, not necessarly in geotiff, and
-# named identically in the three provided directory path, with identical size
-# and geographical footprint.
+# overlay on the segmented maps, used by the process, and the original map from
+# which the processing map are deduced. The maps are expected to be in tiff
+# format, not necessarly in geotiff.
 #
 # ${1} : Storage path
-# ${2} : Location name
 
 # create exportation directory #
-mkdir -p ${1}/regbl_analysis/analysis_${2}/${2}_overlay
+mkdir -p ${1}/regbl_analysis/analysis_overlay
 
 # parsing original maps #
-for regbl_map in ${1}/regbl_frame/frame_${2}-original/*.tif; do
+for regbl_map in ${1}/regbl_frame/frame_original/*.tif; do
 
     # extract map filename #
     regbl_name=$(basename ${regbl_map} .tif)
@@ -44,7 +40,7 @@ for regbl_map in ${1}/regbl_frame/frame_${2}-original/*.tif; do
     echo "Processing map ${regbl_name} ..."
 
     # check consistency #
-    if [ ! -f ${1}/regbl_output/output_frame/frame_${2}/${regbl_name}.tif ]; then
+    if [ ! -f ${1}/regbl_output/output_frame/${regbl_name}.tif ]; then
 
         # display message #
         echo "error : unable to locate corresponding overlay file"
@@ -55,10 +51,10 @@ for regbl_map in ${1}/regbl_frame/frame_${2}-original/*.tif; do
     fi
 
     # compose overlay with original map #
-    convert ${regbl_map} ${1}/regbl_output/output_frame/frame_${2}/${regbl_name}.tif -background black -gravity center -flatten -quality 90 ${1}/regbl_analysis/analysis_${2}/${2}_overlay/${regbl_name}-original.jpg &> /dev/null
+    convert ${regbl_map} ${1}/regbl_output/output_frame/${regbl_name}.tif -background black -gravity center -flatten -quality 90 ${1}/regbl_analysis/analysis_overlay/${regbl_name}_original.jpg &> /dev/null
 
     # check consistency #
-    if [ ! -f ${1}/regbl_frame/frame_${2}/${regbl_name}.tif ]; then
+    if [ ! -f ${1}/regbl_frame/frame/${regbl_name}.tif ]; then
 
         # display message #
         echo "error : unable to locate corresponding original map file"
@@ -69,7 +65,7 @@ for regbl_map in ${1}/regbl_frame/frame_${2}-original/*.tif; do
     fi
 
     # compose overlay with processed map #
-    convert ${1}/regbl_frame/frame_${2}/${regbl_name}.tif ${1}/regbl_output/output_frame/frame_${2}/${regbl_name}.tif -background black -gravity center -flatten -quality 90 ${1}/regbl_analysis/analysis_${2}/${2}_overlay/${regbl_name}.jpg  &> /dev/null
+    convert ${1}/regbl_frame/frame/${regbl_name}.tif ${1}/regbl_output/output_frame/${regbl_name}.tif -background black -gravity center -flatten -quality 90 ${1}/regbl_analysis/analysis_overlay/${regbl_name}.jpg  &> /dev/null
 
 done
 
