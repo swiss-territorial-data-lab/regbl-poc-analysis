@@ -1,8 +1,29 @@
+%  regbl-poc-analysis
+%
+%      Nils Hamel - nils.hamel@alumni.epfl.ch
+%      Huriel Reichel
+%      Copyright (c) 2020-2021 Republic and Canton of Geneva
+%
+%  This program is free software: you can redistribute it and/or modify
+%  it under the terms of the GNU General Public License as published by
+%  the Free Software Foundation, either version 3 of the License, or
+%  (at your option) any later version.
+%
+%  This program is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%  GNU General Public License for more details.
+%
+%  You should have received a copy of the GNU General Public License
+%  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-    function regbl_poc_analysis_metric( regbl_storage_path, regbl_location_name, regbl_metric, regbl_hist_prec = 1 )
+    function regbl_poc_analysis_metric( regbl_storage_path, regbl_metric, regbl_title_location, regbl_hist_prec = 1 )
 
-        % retrieve extremal maps %
-        [ regbl_oldest regbl_latest ] = regbl_poc_analysis_getbounds( [ regbl_storage_path '/regbl_list' ], regbl_location_name );
+        % create directory %
+        mkdir( [ regbl_storage_path '/regbl_analysis' ] );
+
+        % extract maps boundaries %
+        [ regbl_oldest regbl_latest ] = regbl_poc_analysis_bounds( regbl_storage_path );
 
         % import metric egid %
         regbl_valset = dlmread( regbl_metric );
@@ -22,10 +43,10 @@
         for regbl_i = 1 : size( regbl_valset, 1 )
 
             % import deduction %
-            regbl_deduce = dlmread( [ regbl_storage_path '/regbl_output/output_deduce/deduce_' regbl_location_name '/' num2str( regbl_valset(regbl_i) ) ] );
+            regbl_deduce = dlmread( [ regbl_storage_path '/regbl_output/output_deduce/' num2str( regbl_valset(regbl_i) ) ] );
 
             % import reference %
-            regbl_reference = dlmread( [ regbl_storage_path '/regbl_output/output_reference/reference_' regbl_location_name '/' num2str( regbl_valset(regbl_i) ) ] );
+            regbl_reference = dlmread( [ regbl_storage_path '/regbl_output/output_reference/' num2str( regbl_valset(regbl_i) ) ] );
 
             % compute histogram index %
             regbl_hindex = fix( ( regbl_reference - 1800 ) / regbl_hist_prec );
@@ -116,25 +137,37 @@
         % display overall score %
         plot( [ regbl_dense_dates(1), regbl_dense_dates(end) ], [ 1, 1 ] * regbl_score, 'w:', 'linewidth', 2 );
 
+        % display target score %
+        plot( [ regbl_dense_dates(1), regbl_dense_dates(end) ], [ 1, 1 ] * 0.8, 'w:', 'linewidth', 2 );
+
         % display oldest and latest map %
         plot( [ 1 1 ] * regbl_oldest, [ 0, 1 ], 'w-', 'linewidth', 2 );
         plot( [ 1 1 ] * regbl_latest, [ 0, 1 ], 'w-', 'linewidth', 2 );
 
         % display count proportion %
-        plot( regbl_dense_dates, regbl_dense_total / regbl_total, '-w', 'linewidth', 1.5 );
+        plot( regbl_dense_dates, regbl_dense_total / regbl_total, '-.w', 'linewidth', 1.5 );
+
+        % redraw box ... %
+        plot( [ regbl_dense_dates(1), regbl_dense_dates(end) ] , [ 0 0 ], 'k-' );
+        plot( [ regbl_dense_dates(1), regbl_dense_dates(end) ] , [ 1 1 ], 'k-' );
+        plot( [ regbl_dense_dates(end), regbl_dense_dates(end) ] , [ 0 1 ], 'k-' );
 
         % axis configuration %
         axis( [ regbl_dense_dates(1), regbl_dense_dates(end), 0, 1 ] );
 
         % axis label %
-        xlabel( 'Time [Years]' );
-        ylabel( 'Proportion of correct deduction' );
+        xlabel( [ 'Years [' num2str( regbl_hist_prec ) ' Year(s)]' ] );
+        ylabel( [ 'Distribution [Normalised Proportion]' ] );
+
+        % display overall proportion %
+        text( regbl_dense_dates(1) + 1, regbl_score - 0.02, [ num2str( regbl_score * 100, '%0.1f' ) ' %' ], 'color', 'w' );
+        text( regbl_dense_dates(1) + 1, regbl_score + 0.02, [ num2str( ( 1 - regbl_score ) * 100, '%0.1f' ) ' %' ], 'color', 'w' );
 
         % set title %
-        title( [ regbl_location_name ' - Overall : ' num2str( regbl_score * 100, '%0.2f' ) ' % - Building count : ' num2str( regbl_total ) ] );
+        title( [ regbl_title_location ' with ' num2str( regbl_total ) ' validation EGIDs' ] );
 
         % export figure %
-        print( '-dpng', '-r150', 'metric.png' );
+        print( '-dpng', '-r150', [ regbl_storage_path '/regbl_analysis/analysis_histogram-' num2str( regbl_hist_prec )  'y-' regbl_poc_analysis_filename( regbl_metric ) '.png' ] );
 
     end
 

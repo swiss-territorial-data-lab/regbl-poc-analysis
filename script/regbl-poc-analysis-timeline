@@ -31,23 +31,22 @@
 # the system path, the binary of the software has to be provided as parameter.
 
 # ${1} : Storage path
-# ${2} : Location name
-# ${3} : Number of building to randomly select
-# ${4} : Path of tracker binary
+# ${2} : Number of building to randomly select
+# ${3} : Path of tracker binary
 
 # create exportation directory #
-mkdir -p ${1}/regbl_analysis/analysis_${2}/${2}_timeline
+mkdir -p ${1}/regbl_analysis/analysis_timeline
 
 # random selection loop #
-for regbl_i in $(seq 1 ${3}); do
+for regbl_i in $(seq 1 ${2}); do
 
     # random selection of building #
-    regbl_id=$(ls ${1}/regbl_output/output_database/database_${2} | shuf -n 1)
+    regbl_id=$(ls ${1}/regbl_output/output_egid | shuf -n 1)
 
     # display message #
-    echo "Timeline for building ${regbl_id} ..."
+    echo "Compute timeline for EGID ${regbl_id} ..."
 
     # create the time line #
-    ${4} -s ${1} -l ${2} -g ${regbl_id} -e ${1}/regbl_analysis/analysis_${2}/${2}_timeline
+    ${3} -s ${1} -g ${regbl_id} -e ${1}/regbl_analysis/analysis_timeline
 
 done
