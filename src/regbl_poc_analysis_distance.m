@@ -19,6 +19,9 @@
 
     function regbl_poc_analysis_distance( regbl_storage_path, regbl_metric, regbl_title_location )
 
+        % create directory %
+        mkdir( [ regbl_storage_path '/regbl_analysis' ] );
+
         % retrieve extremal maps %
         [ regbl_oldest regbl_latest ] = regbl_poc_analysis_bounds( regbl_storage_path );
 
