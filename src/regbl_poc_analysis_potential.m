@@ -19,17 +19,17 @@
 
     function regbl_poc_analysis_potential( regbl_storage_path, regbl_max_count = 50, regbl_prec = 10 )
 
-        % extract maps boundaries %
+        % create exportation directory %
+        mkdir( [ regbl_storage_path '/regbl_analysis/analysis_potential' ] );
+
+        % extract maps temporal boundaries %
         [ regbl_oldest regbl_latest ] = regbl_poc_analysis_bounds( regbl_storage_path );
 
         % create reference listing %
         regbl_list = dir( [ regbl_storage_path '/regbl_output/output_reference/*' ] );
 
-        % shuffle list %
+        % shuffle reference listing %
         regbl_list = regbl_list( randperm( length( regbl_list ) ) );
-
-        % create exportation directory %
-        mkdir( [ regbl_storage_path '/regbl_analysis/analysis_potential' ] );
 
         % create output stream %
         regbl_stream = fopen( [ regbl_storage_path '/regbl_analysis/analysis_potential/potential' ], 'w' );

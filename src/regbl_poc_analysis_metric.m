@@ -19,10 +19,10 @@
 
     function regbl_poc_analysis_metric( regbl_storage_path, regbl_metric, regbl_title_location, regbl_hist_prec = 1 )
 
-        % create directory %
+        % create exportation directory %
         mkdir( [ regbl_storage_path '/regbl_analysis' ] );
 
-        % extract maps boundaries %
+        % extract maps temporal boundaries %
         [ regbl_oldest regbl_latest ] = regbl_poc_analysis_bounds( regbl_storage_path );
 
         % import metric egid %
@@ -33,7 +33,7 @@
         regbl_total = 0;
 
         % histogram size %
-        regbl_hist_size = fix( 240 / regbl_hist_prec );
+        regbl_hist_size = fix( 140 / regbl_hist_prec );
 
         % prepare histogram %
         regbl_hist_true  = zeros( regbl_hist_size, 1 );
@@ -49,7 +49,7 @@
             regbl_reference = dlmread( [ regbl_storage_path '/regbl_output/output_reference/' num2str( regbl_valset(regbl_i) ) ] );
 
             % compute histogram index %
-            regbl_hindex = fix( ( regbl_reference - 1800 ) / regbl_hist_prec );
+            regbl_hindex = fix( ( regbl_reference - 1900 ) / regbl_hist_prec );
 
             % validation check %
             if ( regbl_reference <= regbl_deduce(1) ) && ( regbl_reference > regbl_deduce(2) )
@@ -104,7 +104,7 @@
                 regbl_k = regbl_k + 1;
 
                 % compute date %
-                regbl_dense_dates( regbl_k ) = ( regbl_i * regbl_hist_prec ) + 1800;
+                regbl_dense_dates( regbl_k ) = ( regbl_i * regbl_hist_prec ) + 1900;
 
                 % assign values %
                 regbl_dense_true ( regbl_k ) = regbl_hist_true ( regbl_i );

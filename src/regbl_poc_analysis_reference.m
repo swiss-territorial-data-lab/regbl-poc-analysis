@@ -28,9 +28,6 @@
         % parsing listing %
         for regbl_i = 1 : size( regbl_list, 1 )
 
-            % import reference date %
-            regbl_reference = dlmread( [ regbl_storage_path '/regbl_output/output_reference/' regbl_list( regbl_i ).name ] );
-
             % export egid %
             fprintf( regbl_stream, '%s\n', regbl_list( regbl_i ).name );
 

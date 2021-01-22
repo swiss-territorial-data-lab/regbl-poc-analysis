@@ -22,6 +22,9 @@
         % import package %
         pkg load image;
 
+        % create exportation directory %
+        mkdir( [ regbl_storage_path '/regbl_analysis' ] );
+
         % create kernel %
         regbl_kernel = fspecial( 'gaussian', [ 1, 1 ] * regbl_kernel_size, regbl_kernel_size / 4 );
 
@@ -85,7 +88,7 @@
         regbl_grep(:,:,3) = zeros( size( regbl_tarea ) );
 
         % export green representation %
-        imwrite( uint8( regbl_grep ), [ regbl_storage_path '/regbl_analysis/analysis_tarea-' regbl_poc_analysis_filename( regbl_metric_file ) '.tif' ], 'Alpha', flip( regbl_tarea', 1 ) );
+        imwrite( uint8( regbl_grep ), [ regbl_storage_path '/regbl_analysis/analysis_area-valid-' regbl_poc_analysis_filename( regbl_metric_file ) '.tif' ], 'Alpha', flip( regbl_tarea', 1 ) );
 
         % create green representation %
         regbl_rrep(:,:,1) = ones( size( regbl_farea ) ) * 255;
@@ -93,7 +96,7 @@
         regbl_rrep(:,:,3) = zeros( size( regbl_farea ) );
 
         % export green representation %
-        imwrite( uint8( regbl_rrep ), [ regbl_storage_path '/regbl_analysis/analysis_farea-' regbl_poc_analysis_filename( regbl_metric_file ) '.tif' ], 'Alpha', flip( regbl_farea', 1 ) );
+        imwrite( uint8( regbl_rrep ), [ regbl_storage_path '/regbl_analysis/analysis_area-fail-' regbl_poc_analysis_filename( regbl_metric_file ) '.tif' ], 'Alpha', flip( regbl_farea', 1 ) );
 
     end
 
