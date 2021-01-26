@@ -33,12 +33,15 @@
 
         % initialise distance set %
         regbl_dist = [];
+        regbl_full = [];
 
         % initialise indexation %
-        regbl_index = 0;
+        regbl_dindex = 0;
+        regbl_findex = 0;
 
         % intialise total computation %
-        regbl_total = 0;
+        regbl_dtotal = 0;
+        regbl_ftotal = 0;
 
         % parsing validation egid %
         for regbl_i = 1 : size( regbl_valset, 1 )
@@ -49,17 +52,61 @@
             % import reference %
             regbl_reference = dlmread( [ regbl_storage_path '/regbl_output/output_reference/' num2str( regbl_valset(regbl_i) ) ] );
 
+            % update index %
+            regbl_findex = regbl_findex + 1;
+
+            % update total %
+            regbl_ftotal = regbl_ftotal + 1;
+
             % range selection %
             if ( ( regbl_deduce(2) >= regbl_oldest ) && ( regbl_deduce(1) <= regbl_latest ) )
 
                 % update index %
-                regbl_index = regbl_index + 1;
-
-                % compute and push distance %
-                regbl_dist( regbl_index ) = ( 0.5 * ( regbl_deduce(1) + regbl_deduce(2) ) ) - regbl_reference;
+                regbl_dindex = regbl_dindex + 1;
 
                 % update total %
-                regbl_total = regbl_total + 1;
+                regbl_dtotal = regbl_dtotal + 1;
+
+                % compute and push distance %
+                regbl_dist( regbl_dindex ) = ( 0.5 * ( regbl_deduce(1) + regbl_deduce(2) ) ) - regbl_reference;
+
+                % push computed distance %
+                regbl_full( regbl_findex ) = regbl_dist( regbl_dindex );
+
+            else
+
+                % check on under/above which extremum the detection is located %
+                if ( regbl_deduce(1) == regbl_oldest )
+
+                    % check reference %
+                    if ( regbl_reference <= regbl_deduce(1) )
+    
+                        % push distance %
+                        regbl_full( regbl_findex ) = 0;
+
+                    else
+
+                        % compute and push distance %
+                        regbl_full( regbl_findex ) = regbl_deduce(1) - regbl_reference;
+
+                    end
+
+                else
+
+                    % check reference %
+                    if ( regbl_reference >= regbl_deduce(2) )
+    
+                        % push distance %
+                        regbl_full( regbl_findex ) = 0;
+
+                    else
+
+                        % compute and push distance %
+                        regbl_full( regbl_findex ) = regbl_deduce(2) - regbl_reference;
+
+                    end
+
+                end
 
             end
 
@@ -69,29 +116,56 @@
         regbl_bims_count = ( max( regbl_dist ) - min( regbl_dist ) );
 
         % compute distance histogram %
-        [ regbl_hist, regbl_dates ] = hist( regbl_dist, regbl_bims_count );
+        [ regbl_dhist, regbl_ddates ] = hist( regbl_dist, regbl_bims_count );
+        [ regbl_fhist, regbl_fdates ] = hist( regbl_full, regbl_bims_count );
 
         % normalise historgam %
-        regbl_hist = regbl_hist / sum( regbl_hist );
+        regbl_dhist = regbl_dhist / sum( regbl_dhist );
+        regbl_fhist = regbl_fhist / sum( regbl_fhist );
 
         % initialise in-range proportion %
-        regbl_inr_fmean = 0;
-        regbl_inr_hmean = 0;
+        regbl_inr_dfmean = 0;
+        regbl_inr_dhmean = 0;
 
         % compute in-range proportion %
-        for regbl_i = 1 : length( regbl_hist )
+        for regbl_i = 1 : length( regbl_dhist )
 
             % check range %
-            if ( ( regbl_dates( regbl_i ) >= -regbl_mean ) && ( regbl_dates( regbl_i ) <= +regbl_mean ) )
+            if ( ( regbl_ddates( regbl_i ) >= -regbl_mean ) && ( regbl_ddates( regbl_i ) <= +regbl_mean ) )
 
                 % update proportion %
-                regbl_inr_fmean = regbl_inr_fmean + regbl_hist( regbl_i );
+                regbl_inr_dfmean = regbl_inr_dfmean + regbl_dhist( regbl_i );
 
                 % check range %
-                if ( ( regbl_dates( regbl_i ) >= -regbl_mean * 0.5 ) && ( regbl_dates( regbl_i ) <= +regbl_mean * 0.5 ) )
+                if ( ( regbl_ddates( regbl_i ) >= -regbl_mean * 0.5 ) && ( regbl_ddates( regbl_i ) <= +regbl_mean * 0.5 ) )
 
                     % update proportion %
-                    regbl_inr_hmean = regbl_inr_hmean + regbl_hist( regbl_i );
+                    regbl_inr_dhmean = regbl_inr_dhmean + regbl_dhist( regbl_i );
+
+                end
+
+            end
+
+        end
+
+        % initialise in-range proportion %
+        regbl_inr_ffmean = 0;
+        regbl_inr_fhmean = 0;
+
+        % compute in-range proportion %
+        for regbl_i = 1 : length( regbl_fhist )
+
+            % check range %
+            if ( ( regbl_fdates( regbl_i ) >= -regbl_mean ) && ( regbl_fdates( regbl_i ) <= +regbl_mean ) )
+
+                % update proportion %
+                regbl_inr_ffmean = regbl_inr_ffmean + regbl_fhist( regbl_i );
+
+                % check range %
+                if ( ( regbl_fdates( regbl_i ) >= -regbl_mean * 0.5 ) && ( regbl_fdates( regbl_i ) <= +regbl_mean * 0.5 ) )
+
+                    % update proportion %
+                    regbl_inr_fhmean = regbl_inr_fhmean + regbl_fhist( regbl_i );
 
                 end
 
@@ -111,31 +185,47 @@
         rectangle( 'position', [ -regbl_mean / 2, 0, regbl_mean, 1 ], 'edgecolor', 'none', 'facecolor', [0.8, 0.8, 0.8] );
 
         % display area plot %
-        regbl_area = area( regbl_dates, regbl_hist' );
+        regbl_area = area( regbl_fdates, regbl_fhist' );
+
+        % configure area %
+        set( regbl_area(1), 'edgecolor', 'none', 'facecolor', [ 192, 78, 66 ] / 255 );
+
+        % display area plot %
+        regbl_area = area( regbl_ddates, regbl_dhist' );
+
+        % configure area %
+        set( regbl_area(1), 'edgecolor', 'none', 'facecolor', [ 22, 98, 142 ] / 255, 'facealpha', 0.75 );
 
         % display central line %
         plot( [ 0 0 ], [ 0 1 ], '-', 'linewidth', 1, 'color', 'k' );
 
-        % configure area %
-        set( regbl_area(1), 'edgecolor', 'none', 'facecolor', [ 22, 98, 142 ] / 255 );
-
         % redraw box ... %
         plot( [ -3 +3 ] * regbl_mean, [ 0.0 0.0 ], 'k-' );
-        plot( [ -3 +3 ] * regbl_mean, [ 1.2 1.2 ] * max( regbl_hist ), 'k-' );
+        plot( [ -3 +3 ] * regbl_mean, [ 1.2 1.2 ] * max( regbl_fhist ), 'k-' );
 
         % axis configuration %
-        axis( [ -regbl_mean*3, +regbl_mean*3, 0, max( regbl_hist ) * 1.2 ] );
+        axis( [ -regbl_mean*3, +regbl_mean*3, 0, max( regbl_fhist ) * 1.2 ] );
 
         % axis label %
         xlabel( 'Distance [Years]' );
         ylabel( 'Distribution [Normalised Proportion]' );
 
         % display overall proportion %
-        text( -regbl_mean * 0.75, max( regbl_hist ) * 1.06, [ num2str( regbl_inr_fmean * 100, '%0.1f' ) ' %' ], 'color', 'k', 'rotation', 90 );
-        text( -regbl_mean * 0.25, max( regbl_hist ) * 1.06, [ num2str( regbl_inr_hmean * 100, '%0.1f' ) ' %' ], 'color', 'k', 'rotation', 90 );
+        text( -regbl_mean * 0.75, max( regbl_fhist ) * 1.06, [ num2str( regbl_inr_dfmean * 100, '%0.1f' ) ' %' ], 'color', [ 22, 98, 142 ] / 255, 'rotation', 90 );
+        text( -regbl_mean * 0.25, max( regbl_fhist ) * 1.06, [ num2str( regbl_inr_dhmean * 100, '%0.1f' ) ' %' ], 'color', [ 22, 98, 142 ] / 255, 'rotation', 90 );
+        text( +regbl_mean * 0.75, max( regbl_fhist ) * 1.06, [ num2str( regbl_inr_ffmean * 100, '%0.1f' ) ' %' ], 'color', [ 192, 78, 66 ] / 255, 'rotation', 90 );
+        text( +regbl_mean * 0.25, max( regbl_fhist ) * 1.06, [ num2str( regbl_inr_fhmean * 100, '%0.1f' ) ' %' ], 'color', [ 192, 78, 66 ] / 255, 'rotation', 90 );
+
+        % diplay EGID counts %
+        text( +1.5 * regbl_mean, max( regbl_fhist ) * 1.10, [ 'EGID : ' num2str( regbl_dtotal ) ], 'color', [ 22, 98, 142 ] / 255 );
+        text( +1.5 * regbl_mean, max( regbl_fhist ) * 1.05, [ 'EGID : ' num2str( regbl_ftotal ) ], 'color', [ 192, 78, 66 ] / 255 );
+
+        % display range size %
+        text( +1.5 * regbl_mean, max( regbl_fhist ) * 0.95, [ 'Inner : \pm' num2str( regbl_mean * 1.0, '%02.1f' ) ' Year(s)' ], 'color', 'k' );
+        text( +1.5 * regbl_mean, max( regbl_fhist ) * 0.90, [ 'Outer : \pm' num2str( regbl_mean * 0.5, '%02.1f' ) ' Year(s)' ], 'color', 'k' );
 
         % set title %
-        title( [ regbl_title_location ' with ' num2str( regbl_total ) ' validation EGIDs' ] );
+        title( regbl_title_location );
 
         % export figure %
         print( '-dpng', '-r150', [ regbl_storage_path '/regbl_analysis/analysis_distance-' regbl_poc_analysis_filename( regbl_metric ) '.png' ] );  

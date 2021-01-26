@@ -18,35 +18,24 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# regbl-poc-analyse-timeline
+# regbl-poc-analyse-timeline-list
 #
-# This script is used to create a timeline, composed of crops of maps centered
-# on selected building, showing the evolution of the building and the results
-# of the detection using color shemes
-#
-# The script makes a random selection of a given amount of buildings using the
-# list of available building.
-#
-# As the software used to create the timeline is not expected to be available in
-# the system path, the binary of the software has to be provided as parameter.
 
 # ${1} : Storage path
-# ${2} : Number of building to randomly select
+# ${2} : Importation list
 # ${3} : Path of tracker binary
 
 # create exportation directory #
-mkdir -p ${1}/regbl_analysis/analysis_timeline
+mkdir -p ${1}/regbl_analysis/analysis_timeline-$(basename ${2})
 
-# random selection loop #
-for regbl_i in $(seq 1 ${2}); do
-
-    # random selection of building #
-    regbl_id=$(ls ${1}/regbl_output/output_egid | shuf -n 1)
+# reading reference file line by line #
+while IFS= read -r regbl_egid; do
 
     # display message #
-    echo "Compute timeline for EGID ${regbl_id} ..."
+    echo "Processing ${regbl_egid} ..."
 
-    # create the time line #
-    ${3} -s ${1} -g ${regbl_id} -e ${1}/regbl_analysis/analysis_timeline
+    # create timeline for the egid #
+    ${3} -s ${1} -g ${regbl_egid} -e ${1}/regbl_analysis/analysis_timeline-$(basename ${2})
 
-done
+# egid file #
+done < "${2}"
