@@ -79,18 +79,37 @@ As the script only exports the transparent overlays, additional work has to be d
 
 ### Automation Scripts
 
-Four automation scripts are available to ease computation of result representation. The first one is used to compute images composing detection and maps. As the primary pipeline creates transparent overlays showing the detection or absence of each building for each of the considered maps, they can be superimposed to the maps themselves and to their segmentation (_bash_ prompt) :
+Three automation scripts are available to ease computation of result representation. The first one is used to compute images composing detection and maps. As the primary pipeline creates transparent overlays showing the detection or absence of each building for each of the considered maps, they can be superimposed to the maps themselves and to their segmentation (_bash_ prompt) :
 
-    $ regbl-poc-analysis-overlay .../main/storage/path
+    $ ./regbl-poc-analysis-overlay .../main/storage/path
 
 The only parameter is a path pointing to the desired processing directory. The results of the composition of the overlays with the maps and segmented maps are exported in the _overlay_ sub-directory of _analysis_ directory. The following image gives and crop of a resulting composition :
 
 <p align="center">
 <img src="doc/image/overlay-example.jpg?raw=true" width="512">
 <br />
-<i>Example of detection overlay superimposed with an original map (left) and its segmented counterpart (right) - Basel, 2000</i>
+<i>Detection overlay superimposed with its map (left) and its segmented counterpart (right) - Basel, 2000</i>
 </p>
 
+The two last automation scripts are used to simplify the computation of timelines of specific buildings. They are both using the primary pipeline software to compute the timeline of the selected building. The usage is the following (_bash_ prompt) :
+
+    $ ./regbl-poc-analysis-timeline-list .../main/storage/path .../path/to/list/file .../path/of/tracker
+
+and :
+
+    $ ./regbl-poc-analysis-timeline-random .../main/storage/path count .../path/of/tracker
+
+In both case, the first parameter is the main storage path on which to apply the computation. For the _list_ script, the second parameter has to be a path pointing to a file containing a list of valid buildings _EGID_ for which a timeline has to be computed. In case of the _random_ script, the list file is replaced by a whole number giving the amount of randomly buildings to select and extract a timeline. The last parameter is identical for both script an has to give the path of the _tracker_ software (executable file) of the primary pipeline used to compute the timelines.
+
+The following image gives and example of such timeline (see primary pipeline documentation) :
+
+<p align="center">
+<img src="doc/image/timeline-example.jpg?raw=true" width="512">
+<br />
+<i>Example of timeline for a specific building of Basel city</i>
+</p>
+
+Both script automatically exports the timelines in the _analysis_ directory in the main storage path. The _list_ script uses the name of the list file to create the directory in which timelines are exported. The _random_ script always exports its timeline in the _timeline-random_ directory.
 
 ## Copyright and License
 

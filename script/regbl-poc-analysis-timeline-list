@@ -20,7 +20,16 @@
 
 # regbl-poc-analyse-timeline-list
 #
-
+# This script is used to create a timeline, composed of crops of maps centered
+# on selected building, showing the evolution of the building and the results
+# of the detection using color shemes
+#
+# The script uses the provided EGID list file as a buildings selection for the
+# computation of their timeline.
+#
+# As the software used to create the timeline is not expected to be available in
+# the system path, the binary of the software has to be provided as parameter.
+#
 # ${1} : Storage path
 # ${2} : Importation list
 # ${3} : Path of tracker binary
