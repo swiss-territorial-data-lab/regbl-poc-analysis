@@ -21,7 +21,7 @@ The following links give access to official documentations on the considered dat
 
 In this repository are stored scripts used around the results of the primary pipeline to compute plots and to automate computation of representations. The plots are mainly created through _octave/MATLAB_ codes while automation is mainly achieved through _bash_ script.
 
-In the following documentation, the _main storage path_ always refers to the root directory of the primary pipeline, used to gather processing configuration and to export results.
+In the following documentation, the _main storage path_ always refers to the root directory of the primary pipeline, used to gather processing configuration and to export results. In addition, all the scripts can only be used on an already and fully processed main storage path.
 
 ### Plots Computation
 
@@ -52,7 +52,7 @@ The second plot available through the scripts is used to compute a distance-base
 The parameters are exactly the same as for the previous script. The following right image gives an illustration of an obtained plot :
 
 <p align="center">
-<img src="doc/image/histogram-example.png?raw=true" width="256"> &nbsb;
+<img src="doc/image/histogram-example.png?raw=true" width="256">
 <img src="doc/image/distance-example.png?raw=true" width="256">
 <br />
 <i>Example of the distance plot obtained using this script - Biasca</i>
@@ -70,7 +70,7 @@ The two first parameters are the same as before. The two last parameters have to
 The output of this script is two transparent images, one for the correct guess and one for the incorrect ones, that can be used as overlays on each of the considered maps of the temporal sequence. The following images give an illustration of the composition of the transparent images with maps :
 
 <p align="center">
-<img src="doc/image/guess-by-area.jpg?raw=true" width="384">
+<img src="doc/image/guess-by-area.jpg?raw=true" width="512">
 <br />
 <i>Example of usage of the two transparent representation on top of a corresponding maps - Basel, 2000</i>
 </p>
@@ -79,6 +79,17 @@ As the script only exports the transparent overlays, additional work has to be d
 
 ### Automation Scripts
 
+Four automation scripts are available to ease computation of result representation. The first one is used to compute images composing detection and maps. As the primary pipeline creates transparent overlays showing the detection or absence of each building for each of the considered maps, they can be superimposed to the maps themselves and to their segmentation (_bash_ prompt) :
+
+    $ regbl-poc-analysis-overlay .../main/storage/path
+
+The only parameter is a path pointing to the desired processing directory. The results of the composition of the overlays with the maps and segmented maps are exported in the _overlay_ sub-directory of _analysis_ directory. The following image gives and crop of a resulting composition :
+
+<p align="center">
+<img src="doc/image/overlay-example.jpg?raw=true" width="512">
+<br />
+<i>Example of detection overlay superimposed with an original map (left) and its segmented counterpart (right) - Basel, 2000</i>
+</p>
 
 
 ## Copyright and License
