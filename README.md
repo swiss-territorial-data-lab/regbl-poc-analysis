@@ -53,7 +53,7 @@ The parameters are exactly the same as for the previous script. The following ri
 
 <p align="center">
 <img src="doc/image/histogram-example.png?raw=true" width="256"> &nbsb;
-<img src="doc/image/plots-example.png?raw=true" width="256">
+<img src="doc/image/distance-example.png?raw=true" width="256">
 <br />
 <i>Example of the distance plot obtained using this script - Biasca</i>
 </p>
