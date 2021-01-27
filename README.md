@@ -10,7 +10,7 @@ The following links give access to the codes related to the project :
 
 * [Primary pipeline - Construction dates extraction using maps](https://github.com/swiss-territorial-data-lab/regbl-poc)
 * [Secondary pipeline - Construction dates extraction without maps](https://github.com/swiss-territorial-data-lab/intYEARpolator)
-* [Results and analysis tools for the processing primary pipeline (this repository)](https://github.com/swiss-territorial-data-lab/regbl-poc-analysis)
+* [Results and analysis tools for the primary pipeline (This repository)](https://github.com/swiss-territorial-data-lab/regbl-poc-analysis)
 
 The following links give access to official documentations on the considered data :
 
