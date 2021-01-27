@@ -27,7 +27,10 @@ In the following documentation, the _main storage path_ always refers to the roo
 
 Three main plots are available for computation. The first one allows to displays the distribution of correct guesses along the time dimension. The usage is, in an _octave_ prompt :
 
-    > regbl_poc_analysis_metric( '/main/storage/path','.../path/to/metric/file','Location Name', histogram_beam_size );
+    > regbl_poc_analysis_metric( '/main/storage/path',
+                                 '.../path/to/metric/file',
+                                 'Location Name',
+                                 histogram_beam_size );
 
 This first parameter simply gives the path of the primary pipeline work directory. The second parameter has to provide a path to a text file containing all the building _EGID_ used as a reference to compute the histogram. This file as to give a list of buildings valid _EGID_ for which a construction date is already avalilable and sufficiantly reliable to be considered as a _ground truth_. A content example could be :
 
@@ -44,9 +47,28 @@ The location name provided as third parameter only gives the name of the studied
 <br />
 <p align="center">
 <img src="doc/image/histogram-example.png?raw=true" width="384">
+<br />
 <i>Example of the histogram obtained using this script - Caslano</i>
 </p>
 <br />
+
+The second plot available through the scripts is used to compute a distance-based representation of the results. It shows the distribution of errors in the attirbution of a construction date to the buildings :
+
+    > regbl_poc_analysis_distance( '/main/storage/path',
+                                 '.../path/to/metric/file',
+                                 'Location Name');
+
+The parameters are exactly the same as for the previous script. The following image gives an illustration of an obtained plot :
+
+<br />
+<p align="center">
+<img src="doc/image/distance-example.png?raw=true" width="384">
+<br />
+<i>Example of the distance plot obtained using this script - Biasca</i>
+</p>
+<br />
+
+
 
 
 ### Automation Scripts
