@@ -104,7 +104,7 @@ In both case, the first parameter is the main storage directory on which to appl
 The following image gives and example of such timeline (see primary pipeline documentation) :
 
 <p align="center">
-<img src="doc/image/timeline-example.jpg?raw=true" width="512">
+<img src="doc/image/timeline-example.png?raw=true" width="512">
 <br />
 <i>Example of timeline for a specific building of Basel city</i>
 </p>
