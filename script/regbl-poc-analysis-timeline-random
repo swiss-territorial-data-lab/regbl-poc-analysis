@@ -43,10 +43,20 @@ for regbl_i in $(seq 1 ${2}); do
     # random selection of building #
     regbl_id=$(ls ${1}/regbl_output/output_egid | shuf -n 1)
 
-    # display message #
-    echo "Compute timeline for EGID ${regbl_id} ..."
+    # check for file #
+    if [ -f ${1}/regbl_analysis/analysis_timeline-random/${regbl_egid}.png ]; then
 
-    # create the time line #
-    ${3} -s ${1} -g ${regbl_id} -e ${1}/regbl_analysis/analysis_timeline-random
+        # display message #
+        echo "Skipping ${regbl_egid} ... (already computed)"
+
+    else
+
+        # display message #
+        echo "Compute timeline for EGID ${regbl_id} ..."
+
+        # create the time line #
+        ${3} -s ${1} -g ${regbl_id} -e ${1}/regbl_analysis/analysis_timeline-random
+
+    fi
 
 done

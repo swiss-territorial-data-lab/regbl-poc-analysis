@@ -40,11 +40,21 @@ mkdir -p ${1}/regbl_analysis/analysis_timeline-$(basename ${2})
 # reading reference file line by line #
 while IFS= read -r regbl_egid; do
 
-    # display message #
-    echo "Processing ${regbl_egid} ..."
+    # check for file #
+    if [ -f ${1}/regbl_analysis/analysis_timeline-$(basename ${2})/${regbl_egid}.png ]; then
 
-    # create timeline for the egid #
-    ${3} -s ${1} -g ${regbl_egid} -e ${1}/regbl_analysis/analysis_timeline-$(basename ${2})
+        # display message #
+        echo "Skipping ${regbl_egid} ... (already computed)"
+
+    else
+
+        # display message #
+        echo "Processing ${regbl_egid} ..."
+
+        # create timeline for the egid #
+        ${3} -s ${1} -g ${regbl_egid} -e ${1}/regbl_analysis/analysis_timeline-$(basename ${2})
+
+    fi
 
 # egid file #
 done < "${2}"
