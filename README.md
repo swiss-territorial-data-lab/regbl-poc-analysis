@@ -63,16 +63,16 @@ On this plot, two distribution are shown : the blue distribution only shows buil
 The last available script allows to compute a graphical representation of the zones where correct and incorrect guesses are the most located (_octave_ prompt) :
 
     > regbl_poc_analysis_area( '.../regbl_process', '.../path/to/metric/file',
-                               image_width, kernel_size );
+                               image_width, kernel_factor = 16 );
 
-The two first parameters are the same as before. The two last parameters have to give the size of the images to compute and the size of the kernel. The size of the kernel indicates how many surrounding pixels will be affected by a single correct or incorrect guess. Using a high value make the computation longer but create smoother representations.
+The two first parameters are the same as before. The two last parameters have to give the size of the images to compute and reduction factor used to determine the size of the spreading kernel according to the image size. By default, _16_ is considered, meaning that the kernel will be _16_ times smaller that the size of the image. A smaller factor leads to smoother representation while a greater one lead to more resolution, but requires more entries in the considered metric.
 
-The output of this script is two transparent images, one for the correct guess and one for the incorrect ones, that can be used as overlays on each of the considered maps of the temporal sequence. The following images give an illustration of the composition of the transparent images with maps :
+The output of this script is two transparent images, one for the correct guess rate and one for the incorrect one, that can be used as overlays on each of the considered maps of the temporal sequence. The following images give an illustration of the composition of the transparent images with maps :
 
 <p align="center">
 <img src="doc/image/guess-by-area.jpg?raw=true" width="512">
 <br />
-<i>Example of usage of the two transparent representation on top of a corresponding maps - Basel, 2000</i>
+<i>Example of usage of the two transparent representation rate on top of a corresponding maps - Bern, 2010</i>
 </p>
 
 As the script only exports the transparent overlays, additional work has to be done do superimpose them on a chosen map.
