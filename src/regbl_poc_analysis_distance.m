@@ -221,8 +221,8 @@
         text( +1.5 * regbl_mean, max( regbl_fhist ) * 1.05, [ 'EGIDs : ' num2str( regbl_ftotal ) ], 'color', [ 192, 78, 66 ] / 255 );
 
         % display range size %
-        text( +1.5 * regbl_mean, max( regbl_fhist ) * 0.95, [ 'Outer : \pm' num2str( regbl_mean * 1.0, '%02.1f' ) ' Year(s)' ], 'color', 'k' );
-        text( +1.5 * regbl_mean, max( regbl_fhist ) * 0.90, [ 'Inner : \pm' num2str( regbl_mean * 0.5, '%02.1f' ) ' Year(s)' ], 'color', 'k' );
+        text( +1.5 * regbl_mean, max( regbl_fhist ) * 0.95, [ '\pm' num2str( regbl_mean * 1.0, '%02.1f' ) ' Year(s)' ], 'color', 'k' );
+        text( +1.5 * regbl_mean, max( regbl_fhist ) * 0.90, [ '\pm' num2str( regbl_mean * 0.5, '%02.1f' ) ' Year(s)' ], 'color', 'k' );
 
         % set title %
         title( regbl_title_location );
