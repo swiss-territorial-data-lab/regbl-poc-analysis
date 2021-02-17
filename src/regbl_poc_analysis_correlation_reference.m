@@ -13,7 +13,7 @@
         % parsing egid %
         for regbl_i = 1 : size( regbl_list, 1 )
 
-            % import deduction %
+            % import reference %
             regbl_reference = dlmread( [ regbl_storage_path '/regbl_output/output_reference/' num2str( regbl_list( regbl_i ) ) ] );
 
             % check reference position %
