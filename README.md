@@ -111,6 +111,18 @@ The following image gives and example of such timeline (see primary pipeline doc
 
 Both script automatically exports the timelines in the _analysis_ directory in the main storage directory. The _list_ script uses the name of the list file to create the directory in which timelines are exported. The _random_ script always exports its timeline in the _timeline-random_ directory.
 
+### Result Exportation
+
+A script is available to translate the detector output files into a single _DSV_ file. The usage follows (_octave_ prompt) :
+
+    > regbl_poc_analysis_todsv( '.../regbl_process', '.../path/to/output.dsv' );
+
+This first parameter gives the path of the primary pipeline storage directory while the second gives the path of the _DSV_ file to create using the detector data. The tabulation is used as a separator. The header of the created _DSV_ file is :
+
+    EGID    GBAUJ_STDL_LOW    GBAUJ_STDL_HIGH
+
+which gives the buildings _EGID_ and the lower and upper boundaries of the detected construction date range as a date. In case the lower boundary is missing, it means that the building was detected as older that the oldest map. The opposite if the upper boundary is missing.
+
 ## Copyright and License
 
 **regbl-poc-analysis** - Nils Hamel, Huriel Richel <br >
