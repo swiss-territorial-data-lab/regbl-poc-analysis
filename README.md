@@ -134,5 +134,10 @@ This program is licensed under the terms of the GNU GPLv3. Documentation and ill
 
 The _regbl-poc-analysis_ comes with the following package (Ubuntu 20.04 LTS) dependencies ([Instructions](DEPEND.md)) :
 
+* bash
+* imagemagick
 * octave
 * octave-image
+
+The [primary pipeline](https://github.com/swiss-territorial-data-lab/regbl-poc) is also needed for some automation script, but not requiring it to be installed in the system.
+
