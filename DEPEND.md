@@ -7,5 +7,5 @@ The following sections give the installation instructions for the required distr
 ### Ubuntu 20.04 LTS
 
 ```
-sudo apt-get install octave octave-image
+sudo apt-get install octave octave-image imagemagick bash
 ```
