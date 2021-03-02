@@ -111,7 +111,7 @@ The following image gives and example of such timeline (see primary pipeline doc
 
 Both script automatically exports the timelines in the _analysis_ directory in the main storage directory. The _list_ script uses the name of the list file to create the directory in which timelines are exported. The _random_ script always exports its timeline in the _timeline-random_ directory.
 
-### Result Exportation
+### Results Exportation
 
 A script is available to translate the detector output files into a single _DSV_ file. The usage follows (_octave_ prompt) :
 
@@ -139,5 +139,5 @@ The _regbl-poc-analysis_ comes with the following package (Ubuntu 20.04 LTS) dep
 * octave
 * octave-image
 
-The [primary pipeline](https://github.com/swiss-territorial-data-lab/regbl-poc) is also needed for some automation script, but not requiring it to be installed in the system.
+The [primary pipeline](https://github.com/swiss-territorial-data-lab/regbl-poc) is also needed for some automation scripts, but without requiring it to be installed on the system.
 
